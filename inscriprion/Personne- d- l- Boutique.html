@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion des Bons</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .container {
+            margin-top: 80px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+        <a class="navbar-brand" href="#">MonApp</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Accueil</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="#">Gestion des Bons</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div class="container">
+        <h2>Gestion des Bons</h2>
+        <button class="btn btn-primary mb-3" onclick="showAddForm()">Ajouter un Bon</button>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Numéro du bon</th>
+                    <th>Objet</th>
+                    <th>Quantité</th>
+                    <th>Prix Unitaire (€)</th>
+                    <th>Montant total (€)</th>
+                    <th>Date d'émission</th>
+                    <th>Date d'expiration</th>
+                    <th>Statut</th>
+                    <th>Description</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="bonTableBody">
+                <!-- Les lignes seront ajoutées dynamiquement par JavaScript -->
+            </tbody>
+        </table>
+
+        <!-- Formulaire d'ajout/modification -->
+        <div id="bonForm" class="d-none">
+            <h3 id="formTitle">Ajouter un Bon</h3>
+            <div class="form-group">
+                <label for="numero">Numéro du bon</label>
+                <input type="text" class="form-control" id="numero">
+            </div>
+            <div class="form-group">
+                <label for="objet">Objet</label>
+                <input type="text" class="form-control" id="objet">
+            </div>
+            <div class="form-group">
+                <label for="quantite">Quantité</label>
+                <input type="number" class="form-control" id="quantite" min="1" value="1" onchange="calculateTotal()">
+            </div>
+            <div class="form-group">
+                <label for="prixUnitaire">Prix Unitaire (€)</label>
+                <input type="number" class="form-control" id="prixUnitaire" step="0.01" min="0" value="0" onchange="calculateTotal()">
+            </div>
+            <div class="form-group">
+                <label for="montant">Montant total (€)</label>
+                <input type="number" class="form-control" id="montant" step="0.01" readonly>
+            </div>
+            <div class="form-group">
+                <label for="dateEmission">Date d'émission</label>
+                <input type="date[_{{{CITATION{{{_1{](https://github.com/js202005082300/Aide-m-moires/tree/c85c562d508c68fa086972462338ed773a25c8ac/JavaScript%2Fcours%2F002_hello_world%2Fnote.md)[_{{{CITATION{{{_2{](https://github.com/kikstrn/test_markdown/tree/cf87059d22c6e1ee76e8a2da0b4a0257051a50be/markdown.md)[_{{{CITATION{{{_3{](https://github.com/ClaireMath/e-commercePHP/tree/d95875ae314d0ef0cbd61bb46c1348b5f061adcf/espace_membre%2Fsignup.php)[_{{{CITATION{{{_4{](https://github.com/Ansou2007/top/tree/e72ab8611d4bcf20e8a11338ba27f18264982da6/views%2Futilisateurs%2Finscription.php)[_{{{CITATION{{{_5{](https://github.com/alias1618/shappages_2019_11_13/tree/6e97e4c4d62a5bbb89bc7cc22712e6698c429455/shoppages%2Forder_detail.php)[_{{{CITATION{{{_6{](https://github.com/ideranah/annuaire/tree/652cc89d70ff90ee0bfb5923ce8c383629adf8af/inscription.php)[_{{{CITATION{{{_7{](https://github.com/idlakip/portfolio/tree/6b500ce5fa537a2dc3b8c7d91052009f1c077c77/index.php)[_{{{CITATION{{{_8{](https://github.com/ikhsanmoh/KasirApp_BS-phpNative_Template/tree/e7a1a58c87704b213755192557e59237c1421f57/app%2Fpages%2Fusers%2Fadd-user.php)[_{{{CITATION{{{_9{](https://github.com/mangomemelhardingconstant/oky/tree/2bae55c44e188042079a68a452adb9ca545b60b3/Connexion.php)[_{{{CITATION{{{_10{](https://github.com/MrDarkG/btum17/tree/f1c20026f09462da648a9518ffdf5c880c9ee9e2/resources%2Fviews%2Fproducts%2Fcreate.blade.php)[_{{{CITATION{{{_11{](https://github.com/venemexcoin/cursocompletolaravel8/tree/0fb11283a31da0c84afedef3562347de9d094015/resources%2Fviews%2Fpost54.blade.php)[_{{{CITATION{{{_12{](https://github.com/themrzlyv/movieland/tree/e10cbc7fda8f8cf1ef44fd0328e11ba52715d0bd/src%2Fpages%2F_document.js)[_{{{CITATION{{{_13{](https://github.com/SantiSL5/ANGULARJS_FW_PHP_MVC_OO/tree/2fd91086fa2eea7c56948aaa023a1c5c0ece9e1b/frontend%2Fassets%2Finc%2Ftop_page_cart.php)[_{{{CITATION{{{_14{](https://github.com/DorianWorkbench/marketPlaceBts/tree/d47c6317a7cba617223c4b8c8a828006c7b46c67/pages%2Fconnexion.php)[_{{{CITATION{{{_15{](https://github.com/ClaireMath/e-commercePHP/tree/d95875ae314d0ef0cbd61bb46c1348b5f061adcf/espace_membre%2Fsignin.php)[_{{{CITATION{{{_16{](https://github.com/Andy-Yawson/agrosourcing/tree/c7ea3ff2f8e6b3a4ca69eb682f14ba86b41b1c51/resources%2Fviews%2Fwebsite%2Fpartials%2F_nav.blade.php)[_{{{CITATION{{{_17{](https://github.com/CapDRAKE/Portfolio/tree/1b6980cd257f78c8c01ea4bf3bff19ae57b7f2eb/veilletechno.php)[_{{{CITATION{{{_18{](https://github.com/sebastienplottu/portfolio_Plante/tree/e52221350d3b089385b324225990804ba52d8aaf/Php%2Findex.php)[_{{{CITATION{{{_19{](https://github.com/Victoria07/BlogPourEcrivain/tree/1b91f567a82a7d682a2d6fb39b970dac79c94bf6/src%2FVues%2Frechercher.php)[_{{{CITATION{{{_20{](https://github.com/sandy-rouhaud/projet-ansible/tree/e8caf1c0b3f4c5fb29e94cca0afd7ca56d06ea3f/Project-1git-main%2Froles%2Fweb%2Ffiles%2Fapp%2Findex.php)[_{{{CITATION{{{_21{](https://github.com/Yachironi/PolytechDashboard/tree/3dbd32cb7db5395a45728fdc1eb34e553ba2a2b2/Backup%2Fpages%2Ftasks%2Fassign_task.php)

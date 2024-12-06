@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page des Bons</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .container {
+            margin-top: 80px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+        <a class="navbar-brand" href="#">MonApp</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="index.html">Accueil</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="">Bons</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Profil</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div class="container">
+        <h2>Liste des Bons</h2>
+        <button class="btn btn-primary mb-3" onclick="showAddForm()">Ajouter un Bon</button>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Numéro du bon</th>
+                    <th>Objet</th>
+                    <th>Quantité</th>
+                    <th>Prix Unitaire (€)</th>
+                    <th>Date d'émission</th>
+                    <th>Date d'expiration</th>
+                    <th>Statut</th>
+                    <th>Description</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="bonTableBody">
+                <!-- Les lignes seront ajoutées dynamiquement par JavaScript -->
+            </tbody>
+        </table>
+
+        <!-- Formulaire d'ajout/modification -->
+        <div id="bonForm" class="d-none">
+            <h3 id="formTitle">Ajouter un Bon</h3>
+            <div class="form-group">
+                <label for="numero">Numéro du bon</label>
+                <input type="text" class="form-control" id="numero">
+            </div>
+            <div class="form-group">
+                <label for="objet">Objet</label>
+                <input type="text" class="form-control" id="objet">
+            </div>
+            <div class="form-group">
+                <label for="quantite">Quantité</label>
+                <input type="number" class="form-control" id="quantite" min="1" value="1">
+            </div>
+            <div class="form-group">
+                <label for="prixUnitaire">Prix Unitaire (€)</label>
+                <input type="number" class="form-control" id="prixUnitaire" step="0.01" min="0" value="0">
+            </div>
+            <div class="form-group">
+                <label for="dateEmission">Date d'émission</label>
+                <input type="date" class="form-control" id="dateEmission">
+            </div>
+            <div class="form-group">
+                <label for="dateExpiration">Date d'expiration</label>
+                <input type="date" class="form-control" id="dateExpiration">
+            </div>
+            <div class="form-group">
+                <label for="statut">Statut</label>
+                <select class="form-control" id="statut">
+                    <option value="Émis">Émis</option>
+                    <option value="Utilisé">Utilisé</option>
+                    <option value="Expiré">Expiré</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="description">Description</label>
+                <textarea class="form-control" id="description"></textarea>
+            </div>
+            <button class="btn btn-primary" type="button" onclick="addOrUpdateBon()">Valider</button>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        const bons = [
+            {numero: '001', objet: 'Achat de livres', quantite: 10, prixUnitaire: 10, dateEmission: '2024-12-01', dateExpiration: '2025-12-01', statut: 'Émis', description: 'Bon pour achat de livres'},
+            {numero: '002', objet: 'Courses alimentaires', quantite: 10, prixUnitaire: 5, dateEmission: '2024-12-02', dateExpiration: '2025-06-02', statut: 'Utilisé', description: 'Bon pour courses alimentaires'},
+            // Ajoutez plus de bons selon vos besoins
+        ];
+        let editIndex = null;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            renderTable();
+        });
+
+        function renderTable() {
+            const tableBody = document.getElementById('bonTableBody');
+            tableBody.innerHTML = '';
+            bons.forEach((bon, index) => {
+                const row = `<tr>
+                    <td>${bon.numero}</td>
+                    <td>${bon.objet}</td>
+                    <td>${bon.quantite}</td>
+                    <td>${bon.prixUnitaire}</td>
+                    <td>${bon.dateEmission}</td>
+                    <td>${bon.dateExpiration}</td>
+                    <td>${bon.statut}</td>
+                    <td>${bon.description}</td>
+                    <td>
+                        <button class="btn btn-warning btn-sm" onclick="editBon(${index})">Modifier</button>
+                        <button class="btn btn-danger btn-sm" onclick="deleteBon(${index})">Supprimer</button>
+                    </td>
+                </tr>`;
+                tableBody.insertAdjacentHTML('beforeend', row);
+            });
+        }
+
+        function showAddForm() {
+            document.getElementById('bonForm').classList.remove('d-none');
+            document.getElementById('formTitle').textContent = 'Ajouter un Bon';
+            clearForm();
+            editIndex = null;
+        }
+
+        function clearForm() {
+            document.getElementById('numero').value = '';
+            document.getElementById('objet').value = '';
+            document.getElementById('quantite').value = 1;
+            document.getElementById('prixUnitaire').value = 0;
+            document.getElementById('dateEmission').value = '';
+            document.getElementById('dateExpiration').value = '';
+            document.getElementById('statut').value = 'Émis';
+            document.getElementById('description').value = '';
+        }
+
+        function addOrUpdateBon() {
+            const numero = document.getElementById('numero').value;
+            const objet = document.getElementById('objet').value;
+            const quantite = document.getElementById('quantite').value;
+            const prixUnitaire = document.getElementById('prixUnitaire').value;
+            const dateEmission = document.getElementById('dateEmission').value;
+            const dateExpiration = document.getElementById('dateExpiration').value;
+            const statut = document.getElementById('statut').value;
+            const description = document.getElementById('description').value;
+
+            const bon = { numero, objet, quantite, prixUnitaire, dateEmission, dateExpiration, statut, description };
+
+            if (editIndex === null) {
+                bons.push(bon);
+            } else {
+                bons[editIndex] = bon;
+            }
+            
+            renderTable();
+            document.getElementById('bonForm').classList.add('d-none');
+        }
+
+        function editBon(index) {
+            const bon = bons[index];
+            document.getElementById('numero').value = bon.numero;
+            // document.getElementById('montant').value = bon.montant;
+            document.getElementById('dateEmission').value = bon.dateEmission;
+            document.getElementById('dateExpiration').value = bon.dateExpiration;
+            document.getElementById('statut').value = bon.statut;
+            document.getElementById('description').value = bon.description;
+            document.getElementById('prixUnitaire').value = bon.prixUnitaire;
+
+            document.getElementById('bonForm').classList.remove('d-none');
+            document.getElementById('formTitle').textContent = 'Modifier le Bon';
+            editIndex = index;    
+            
+            function deleteBon(index) {
+                bons.splice(index, 1);
+                renderTable();
+            }
+        }
+
+        </script>
+</body>
+</html>
